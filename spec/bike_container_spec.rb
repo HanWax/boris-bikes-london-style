@@ -5,7 +5,7 @@ shared_examples 'a bike container' do
 	let(:parliament) { described_class.new(:capacity => 30) }
 	let(:boris) { double :bike, broken?: false }
 	let(:dave) { double :bike, broken?: true }
-	let(:default_capacity) { parliament::DEFAULT_CAPACITY }
+	let(:default_capacity) { described_class::DEFAULT_CAPACITY }
 
 
 	it "should initialize with a set capacity" do
@@ -25,6 +25,10 @@ shared_examples 'a bike container' do
 		parliament.dock(boris)
 		parliament.release(boris)
 		expect(parliament.bikes).to be_empty
+	end
+
+	it 'should not release a boris if there are no available borises' do 
+		expect{ parliament.release(boris) }.to raise_error(RuntimeError) 
 	end
 
 	it 'should know just how many borises it can take' do
